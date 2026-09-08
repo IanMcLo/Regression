@@ -183,7 +183,13 @@ function update() {
 
     // Forecast extension (dashed)
     const forecastLine = regLine.filter(p => p.x >= LAST_DAY);
-
+// --- ADD THIS BLOCK ---
+    const linModel = linearRegression(data);
+    const linLine = [];
+    for (let x = data[0].x; x <= maxForecastDay; x += 10) {
+        linLine.push({ x, y: linModel.m * x + linModel.c });
+    }
+    // ----------------------
     // Annotation lines for targets
     const annotations = {};
     targets.forEach((t, i) => {
@@ -251,13 +257,32 @@ function update() {
                     tension: 0,
                     order: 1
                 }
-                // --- ADD THIS BLOCK ---
-    const linModel = linearRegression(data);
-    const linLine = [];
-    for (let x = data[0].x; x <= maxForecastDay; x += 10) {
-        linLine.push({ x, y: linModel.m * x + linModel.c });
-    }
-    // ----------------------
+                {
+                    label: 'Forecast',
+                    data: forecastLine,
+                    type: 'line',
+                    borderColor: 'rgba(253,203,110,0.7)',
+                    borderWidth: 2,
+                    borderDash: [8, 5],
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0,
+                    order: 1
+                },
+                // ✅ ADD THIS NEW DATASET RIGHT HERE (after line 253, before line 254)
+                {
+                    label: 'Linear Baseline (R²: ' + linModel.r2.toFixed(3) + ')',
+                    data: linLine,
+                    type: 'line',
+                    borderColor: 'rgba(139, 143, 163, 0.4)',
+                    borderWidth: 1.5,
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0,
+                    order: 4
+                }
+            ]   // ← this is line 254
             ]
         },
         options: {
