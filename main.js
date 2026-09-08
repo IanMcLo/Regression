@@ -88,7 +88,29 @@ function exponentialRegression(data) {
     }
     return { a, b, r2: 1 - ssRes / ssTot, rmse: Math.sqrt(ssRes / n) };
 }
+function linearRegression(data) {
+    const n = data.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+    for (const d of data) {
+        sumX += d.x;
+        sumY += d.y;
+        sumXY += d.x * d.y;
+        sumX2 += d.x * d.x;
+        sumY2 += d.y * d.y;
+    }
+    const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const c = (sumY - m * sumX) / n;
 
+    // Calculate R²
+    let ssRes = 0, ssTot = 0;
+    const meanY = sumY / n;
+    for (const d of data) {
+        const pred = m * d.x + c;
+        ssRes += (d.y - pred) ** 2;
+        ssTot += (d.y - meanY) ** 2;
+    }
+    return { m, c, r2: 1 - ssRes / ssTot };
+}
 function forecastDay(target, a, b) {
     return (Math.log(target) - Math.log(a)) / b;
 }
@@ -229,6 +251,13 @@ function update() {
                     tension: 0,
                     order: 1
                 }
+                // --- ADD THIS BLOCK ---
+    const linModel = linearRegression(data);
+    const linLine = [];
+    for (let x = data[0].x; x <= maxForecastDay; x += 10) {
+        linLine.push({ x, y: linModel.m * x + linModel.c });
+    }
+    // ----------------------
             ]
         },
         options: {
