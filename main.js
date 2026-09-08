@@ -256,20 +256,7 @@ function update() {
                     fill: false,
                     tension: 0,
                     order: 1
-                }
-                {
-                    label: 'Forecast',
-                    data: forecastLine,
-                    type: 'line',
-                    borderColor: 'rgba(253,203,110,0.7)',
-                    borderWidth: 2,
-                    borderDash: [8, 5],
-                    pointRadius: 0,
-                    fill: false,
-                    tension: 0,
-                    order: 1
                 },
-                // ✅ ADD THIS NEW DATASET RIGHT HERE (after line 253, before line 254)
                 {
                     label: 'Linear Baseline (R²: ' + linModel.r2.toFixed(3) + ')',
                     data: linLine,
@@ -282,8 +269,7 @@ function update() {
                     tension: 0,
                     order: 4
                 }
-            ]   // ← this is line 254
-            ]
+            ] // <-- Only ONE closing bracket here for the datasets array
         },
         options: {
             responsive: true,
