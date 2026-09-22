@@ -58,7 +58,7 @@ const RAW_DATA = [
 ];
 
 const OUTLIER_DAYS = [1437];
-const LAST_DAY = 1710;
+const LAST_DAY = 1724;
 
 // ============================================================
 // REGRESSION ENGINE
